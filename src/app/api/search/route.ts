@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const mockData = [
+export const mockData = [
   {
     id: 1,
     title: 'React Documentation',
