@@ -1,5 +1,13 @@
 import { GET } from '../route';
 
+// Define types for search results
+interface SearchResult {
+  title: string;
+  description: string;
+  category: string;
+  url: string;
+}
+
 // Mock NextRequest with a simpler approach
 const createMockRequest = (url: string) => {
   const mockRequest = {
@@ -7,7 +15,11 @@ const createMockRequest = (url: string) => {
     method: 'GET',
     headers: new Map(),
   };
-  return mockRequest as any;
+  return mockRequest as {
+    url: string;
+    method: string;
+    headers: Map<string, string>;
+  };
 };
 
 describe('/api/search', () => {
@@ -48,7 +60,7 @@ describe('/api/search', () => {
     expect(data.query).toBe('react');
 
     // Should find React Documentation and React Hooks Guide
-    const titles = data.results.map((result: any) => result.title);
+    const titles = data.results.map((result: SearchResult) => result.title);
     expect(titles).toContain('React Documentation');
     expect(titles).toContain('React Hooks Guide');
   });
@@ -64,7 +76,7 @@ describe('/api/search', () => {
     expect(data.results.length).toBeGreaterThan(0);
 
     // Should find React Hooks Guide
-    const titles = data.results.map((result: any) => result.title);
+    const titles = data.results.map((result: SearchResult) => result.title);
     expect(titles).toContain('React Hooks Guide');
   });
 
@@ -79,7 +91,7 @@ describe('/api/search', () => {
     expect(data.results.length).toBeGreaterThan(0);
 
     // All results should have Documentation category
-    data.results.forEach((result: any) => {
+    data.results.forEach((result: SearchResult) => {
       expect(result.category).toBe('Documentation');
     });
   });
@@ -94,7 +106,7 @@ describe('/api/search', () => {
     expect(response.status).toBe(200);
     expect(data.results.length).toBeGreaterThan(0);
 
-    const titles = data.results.map((result: any) => result.title);
+    const titles = data.results.map((result: SearchResult) => result.title);
     expect(titles).toContain('React Documentation');
   });
 
